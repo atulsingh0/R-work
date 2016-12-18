@@ -85,5 +85,5 @@ marks[marks<25]  # 20, 24
 
 
 ############################################################
-## Atul Singh  | www.datagenx.net | lnkd.in/fP_uwKT
+## Atul Singh  | www.datagenx.net | lnked.in/atulsingh
 ############################################################
