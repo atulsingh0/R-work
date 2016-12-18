@@ -1,6 +1,6 @@
 
 ################################################################
-##  R1 : Basics Matrix
+##  R1 : Basics Matrix & Factor
 ##  Atul Singh
 ##  www.datagenx.net
 ################################################################
@@ -82,6 +82,47 @@ mat[,1:3]/v
 sum(mat[,3]/v)
 mean(mat[,3]/v)
 
+
+############################
+## Factor
+############################
+
+
+gender <- factor(c("Male", "Female", "Male", "Female", "Female"))
+gender
+
+weather <- c("Winter", "Summer", "Rain", "Cloudy")
+fact_weather <- factor(weather)
+fact_weather
+
+# creating ordinal factor, implied order
+w2 <- c("Summer","Summer","Winter", "Summer", "Rainy")
+levels <- c("Winter", "Summer", "Rainy")
+fact_w2 <- factor(w2, order=TRUE, level=levels)
+fact_w2
+
+
+# can change the factor level names
+data <- c("Y", 'N'); data
+fact_data <- factor((data)); fact_data
+levels(fact_data) <- c("YES", "NO")  # this will be wrong
+fact_data  
+levels(fact_data) <- c("NO", "YES")  # follor the element order
+fact_data  
+
+
+#Summarizing a factor
+summary(data)
+summary(fact_data)
+summary(w2)
+summary(fact_w2)
+
+# can not compare unordered factor
+
+
+# ordered factor (comparable)
+fact_w2
+fact_w2[2] > fact_w2[3]  # TRUE
 
 
 
