@@ -33,4 +33,6 @@ views >= 4
 views == 3
 
 
-# Logical Operator  & (AND), | (OR), 
+# Logical Operator  & (AND), | (OR), ! (Not)
+a > 3 & a < 6  # TRUE
+a > 6 |  
