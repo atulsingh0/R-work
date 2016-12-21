@@ -22,6 +22,23 @@ path
 hiv <- read.table(path, sep=",")
 str(hiv)
 
+# explore
+# read_tsv()
+# read_tsv("potatoes.txt", colnames<-c("A","B")
+# read_delim()
+# read_delim(file="potatoes.txt", delim="\t", col_names=properties)
+
+
+# skip - specifies the number of lines you're ignoring in the flat file before actually 
+# starting to import data
+# n_max - specifies the number of lines you're actually import.
+# read_tsv("potatoes.txt", skip = 6, n_max = 5, col_names = properties)
+
+# read_tsv("potatoes.txt", col_types = "cccccccc", col_names = properties)
+# c - character, i - integer, d - double
+
+# fread func (data.table)
+
 
 ## Reading Excel
 sheets <- excel_sheets("Learn/titanic.xls")
