@@ -9,13 +9,22 @@ setwd("C:/Git/R-work/Utilities")
 ##### source pkg function
 source("pkg.r")
 #pkg()
-
+source("func.r")
+index = getIndex()
+toDate  <- format(Sys.time(), "%d-%b-%Y")
+toDate2  <- format(Sys.time(), "%d-%b-%y")
 
 #########  reading dataset
-train = read.csv(file.choose())
+fileName =  file.choose()
+train = read.csv(fileName)
+newRow = data.frame(Date=toDate2, Close=index)
+newRow
+train <- rbind(train, newRow)
+train <- train[2:nrow(train),]
+train[1708,]
+# saving the data into new file
+write.csv(train, file = paste(strsplit(fileName, '.csv'),"_",toDate,".csv", sep=""), row.names = FALSE)
 train = train[1:1708,]
-
-
 
 
 ####### Take  train data from Jan'2013 till dec'2015 && test data from Jan'16 till dec'16 #########
@@ -24,18 +33,15 @@ train$Date =  as.Date(train$Date, format = "%d-%b-%y")
 
 DATE1 <- as.Date("2010-01-01")
 DATE2 <- as.Date("2014-12-31")
-DATE3 <- as.Date("2016-12-31")
-
-
+#DATE3 <- as.Date("2016-12-31")
+DATE3 <- as.Date(format(Sys.time(), "%Y-%m-%d"))
 
 ############ training and test data creation
 training <- train[train$Date >= DATE1 & train$Date <= DATE2,2]
-
-
 test <- train[train$Date > DATE2 & train$Date <= DATE3,2]
-
-
-
+## adding new index in test
+#test <- c(test[,],index)
+length(test)
 
 
 ######  Convert Data into Time Series #######
@@ -43,7 +49,7 @@ test <- train[train$Date > DATE2 & train$Date <= DATE3,2]
 #####  frequency calculation = average of data present annualy from 2014 till 2016
 ##### start(year,day number) end(year,day number)
 myts_training <- ts(training, start=c(2010,01), end=c(2014,244), frequency = 244) 
-myts_test  <-  ts(test, start=c(2015,01), end=c(2016,244), frequency = 244)
+myts_test  <-  ts(test, start=c(2015,01), end=c(2017,244), frequency = 244)
 
 
 ######  Visualize the Time Series Created #######
@@ -60,7 +66,7 @@ plot(decom)
 ####  stationarity test on series   ### series is stationary
 adf.test(myts_training)
 ################ coverting to quartiles
- qrt = quantile(myts_training, 0.75)
+qrt = quantile(myts_training, 0.75)
 myts_quantile = myts_training
 for (i in 1:1220  )  {
 if(myts_quantile[i] > 23.415)  
@@ -171,9 +177,7 @@ res_na
  
  
  ####### forecast on 488 residuals
- 
- 
-  res_forecast = forecast(auto_regressive, 488 )
+ res_forecast = forecast(auto_regressive, 488 )
  focast = as.data.frame(res_forecast)
 
  plot.forecast(res_forecast)
