@@ -1,5 +1,4 @@
 pkg = function()
-
 {
 install.packages("tseries")
 install.packages("timeSeries")

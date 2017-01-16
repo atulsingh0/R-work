@@ -12,12 +12,18 @@ source("pkg.r")
 source("func.r")
 index = getIndex()
 toDate  <- format(Sys.time(), "%d-%b-%Y")
+toDate2  <- format(Sys.time(), "%d-%b-%y")
 
 #########  reading dataset
-train = read.csv(file.choose())
+fileName =  file.choose()
+train = read.csv(fileName)
+newRow = data.frame(Date=toDate2, Close=index)
+newRow
+train <- rbind(train, newRow)
+train[1708:1709,]
+# saving the data into new file
+write.csv(train, file = paste(strsplit(fileName, '.csv'),"_",toDate,".csv", sep=""), row.names = FALSE)
 train = train[1:1708,]
-
-
 
 
 ####### Take  train data from Jan'2013 till dec'2015 && test data from Jan'16 till dec'16 #########
@@ -26,9 +32,8 @@ train$Date =  as.Date(train$Date, format = "%d-%b-%y")
 
 DATE1 <- as.Date("2010-01-01")
 DATE2 <- as.Date("2014-12-31")
-DATE3 <- as.Date("2016-12-31")
-
-
+#DATE3 <- as.Date("2016-12-31")
+DATE3 <- format(Sys.time(), "%Y-%m-%d")
 
 ############ training and test data creation
 training <- train[train$Date >= DATE1 & train$Date <= DATE2,2]

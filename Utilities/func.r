@@ -1,6 +1,5 @@
 
-getIndex = func()
-
+getIndex = function()
 {
 library(RCurl)
 library(XML)
