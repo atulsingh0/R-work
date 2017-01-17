@@ -4,8 +4,9 @@ getIndex = function()
 library(RCurl)
 library(XML)
 
-fromDate <- format(Sys.time()-5, "%d-%b-%Y")
-toDate  <- format(Sys.time(), "%d-%b-%Y")
+today <- as.Date(Sys.time())
+toDate  <- format(today-1, "%d-%b-%Y")
+fromDate <- format(today-5, "%d-%b-%Y")
 
 
 baseUrl = 'https://www.nse-india.com/products/dynaContent/equities/indices/hist_vix_data.jsp?'
@@ -16,6 +17,9 @@ data <- data.frame(readHTMLTable(doc, skip.rows=2,  header=TRUE))
 colnames(data) <- c("Date","Open","High","Low","Close","Prev. Close","Change %", "Change")
 rownames(data) <- data$Date
 #data
+#data[toDate,]
 #return Index
-data[toDate, "Close"]
+
+ret<-list(toDate, data[toDate, "Close"])
+ret
 }

@@ -10,9 +10,10 @@ setwd("C:/Git/R-work/Utilities")
 source("pkg.r")
 #pkg()
 source("func.r")
-index = getIndex()
-toDate  <- format(Sys.time(), "%d-%b-%Y")
-toDate2  <- format(Sys.time(), "%d-%b-%y")
+toDate = getIndex()[1]
+index = getIndex()[2]
+#toDate  <- format(Sys.time(), "%d-%b-%Y")
+toDate2  <- format(as.Date(Sys.time())-1, "%d-%b-%y")
 
 #########  reading dataset
 fileName =  file.choose()
