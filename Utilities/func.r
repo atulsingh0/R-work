@@ -19,7 +19,7 @@ rownames(data) <- data$Date
 #data
 #data[toDate,]
 #return Index
-
-ret<-list(toDate, data[toDate, "Close"])
-ret
+data[toDate, "Close"]
+#ret<-list(toDate, data[toDate, "Close"])
+#ret
 }

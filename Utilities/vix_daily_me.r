@@ -4,28 +4,30 @@ library(TTR)
 library(forecast)
 library(tseries)
 ###### set working directory
-setwd("C:/Git/R-work/Utilities")
+setwd("C:/learn/Git/R-work/Utilities")
 
 ##### source pkg function
 source("pkg.r")
 #pkg()
 source("func.r")
-toDate = getIndex()[1]
-index = getIndex()[2]
-#toDate  <- format(Sys.time(), "%d-%b-%Y")
+
+index = getIndex()
+toDate  <- format(Sys.time(), "%d-%b-%Y")
 toDate2  <- format(as.Date(Sys.time())-1, "%d-%b-%y")
+toYear <- as.numeric(format(Sys.time()-1, "%Y"))
+toDay <- as.numeric(format(as.Date(Sys.time())-1, "%d"))
 
 #########  reading dataset
 fileName =  file.choose()
 train = read.csv(fileName)
 newRow = data.frame(Date=toDate2, Close=index)
 newRow
-train <- rbind(train, newRow)
-train <- train[2:nrow(train),]
+toDate2
+#train <- rbind(train, newRow)
 train[1708,]
 # saving the data into new file
-write.csv(train, file = paste(strsplit(fileName, '.csv'),"_",toDate,".csv", sep=""), row.names = FALSE)
-train = train[1:1708,]
+#write.csv(train, file = paste(strsplit(fileName, '.csv'),"_",toDate,".csv", sep=""), row.names = FALSE)
+train = train[1:nrow(train),]
 
 
 ####### Take  train data from Jan'2013 till dec'2015 && test data from Jan'16 till dec'16 #########
@@ -40,8 +42,7 @@ DATE3 <- as.Date(format(Sys.time(), "%Y-%m-%d"))
 ############ training and test data creation
 training <- train[train$Date >= DATE1 & train$Date <= DATE2,2]
 test <- train[train$Date > DATE2 & train$Date <= DATE3,2]
-## adding new index in test
-#test <- c(test[,],index)
+length(training)
 length(test)
 
 
@@ -50,8 +51,9 @@ length(test)
 #####  frequency calculation = average of data present annualy from 2014 till 2016
 ##### start(year,day number) end(year,day number)
 myts_training <- ts(training, start=c(2010,01), end=c(2014,244), frequency = 244) 
-myts_test  <-  ts(test, start=c(2015,01), end=c(2017,244), frequency = 244)
-
+myts_test  <-  ts(test, start=c(2015,01), end=c(toYear,toDay), frequency = 244)
+length(myts_training)
+length(myts_test)
 
 ######  Visualize the Time Series Created #######
 plot(myts_training, col = "Blue",xlab="Year", ylab="Close",  main=" VIX_CLOSE VS YEAR")
@@ -70,11 +72,11 @@ adf.test(myts_training)
 qrt = quantile(myts_training, 0.75)
 myts_quantile = myts_training
 for (i in 1:1220  )  {
-if(myts_quantile[i] > 23.415)  
-{
-  myts_quantile[i] = qrt
-}
+  if(myts_quantile[i] > 23.415)  
+  {
+    myts_quantile[i] = qrt
   }
+}
 
 ######### original vs new training
 
@@ -84,8 +86,8 @@ legend("topleft", legend = c("transformed", "original"), col = c(2,4), lty = 7)
 
 
 
- ####   using holtwinters 
- hws_quantile <- HoltWinters(myts_quantile)
+####   using holtwinters 
+hws_quantile <- HoltWinters(myts_quantile)
 ########## holtwinters forecast
 
 holtwinter_quantile_forecast = forecast.HoltWinters(hws_quantile,h = 488, level = c(0.75,0.85,0.95))
@@ -137,7 +139,7 @@ res  = holtwinter_quantile_forecast$residuals
 res_na = res[245:1220]
 plot(res_na)
 acf(res_na, lag.max = 244)
- 
+
 
 ######### bollinger bands
 
@@ -158,35 +160,37 @@ lines(dataPlusBB$mavg, col = "blue")
 ####### auto regression on r
 res_na
 
- auto_regressive = ar(res_na)
+auto_regressive = ar(res_na)
 
- auto_regressive
- 
- 
- 
- fitted(auto_regressive)
- 
- 
- plot(fitted(auto_regressive), col = "blue")
- 
- 
- lines(res_na, col = "red")
- 
- 
- 
- 
- 
- 
- ####### forecast on 488 residuals
- res_forecast = forecast(auto_regressive, 488 )
- focast = as.data.frame(res_forecast)
+auto_regressive
 
- plot.forecast(res_forecast)
 
- focast_res = ts(focast$`Point Forecast`, start = c(2015,01), end = c(2016,244), frequency = 244)
- 
+
+fitted(auto_regressive)
+
+
+plot(fitted(auto_regressive), col = "blue")
+
+
+lines(res_na, col = "red")
+
+
+
+
+
+
+####### forecast on 488 residuals
+
+
+res_forecast = forecast(auto_regressive, 488 )
+focast = as.data.frame(res_forecast)
+
+plot.forecast(res_forecast)
+
+focast_res = ts(focast$`Point Forecast`, start = c(2015,01), end = c(2016,244), frequency = 244)
+
 ##### orginal residuals
- 
+
 original_res  = test - predict_quantile[1:488]
 original_res =  ts(original_res, start = c(2015,01), end = c(2016,244), frequency = 244)
 plot(original_res) 
@@ -197,3 +201,4 @@ write.csv(hws_quantile$fitted[,1], file = "fitted_values.csv", row.names = FALSE
 predict_quantile
 
 write.csv(predict_quantile, file = "predict_50% quartile.csv", row.names = FALSE)
+

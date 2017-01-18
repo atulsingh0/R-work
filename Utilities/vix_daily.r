@@ -4,7 +4,7 @@ library(TTR)
 library(forecast)
 library(tseries)
 ###### set working directory
-setwd("C:/Git/R-work/Utilities")
+setwd("C:/learn/Git/R-work/Utilities")
 
 ##### source pkg function
 source("pkg.r")
@@ -30,9 +30,9 @@ DATE3 <- as.Date("2016-12-31")
 
 ############ training and test data creation
 training <- train[train$Date >= DATE1 & train$Date <= DATE2,2]
-
-
 test <- train[train$Date > DATE2 & train$Date <= DATE3,2]
+length(training)
+length(test)
 
 
 
