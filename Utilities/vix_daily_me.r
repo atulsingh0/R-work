@@ -24,7 +24,7 @@ newRow = data.frame(Date=toDate2, Close=index)
 newRow
 toDate2
 #train <- rbind(train, newRow)
-train[1708,]
+train[1719,]
 # saving the data into new file
 #write.csv(train, file = paste(strsplit(fileName, '.csv'),"_",toDate,".csv", sep=""), row.names = FALSE)
 train = train[1:nrow(train),]

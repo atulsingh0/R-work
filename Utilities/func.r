@@ -23,3 +23,6 @@ data[toDate, "Close"]
 #ret<-list(toDate, data[toDate, "Close"])
 #ret
 }
+
+
+https://www.nse-india.com/products/dynaContent/equities/indices/hist_vix_data.jsp?&fromDate=01JAN2017&toDate=01FEB2017
